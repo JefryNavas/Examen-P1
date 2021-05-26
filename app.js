@@ -5,10 +5,10 @@ let comando = argv._[0];
 
 switch (comando) {
     case "mostrar":
-        leerDatos(argv.file, argv.country, argv.year, 1);
+        leerDatos(argv.archivo, argv.pais, argv.anio);
         break;
     case "guardar":
-        leerDatos(argv.file, argv.country, argv.year, argv.out)
+        leerDatos(argv.archivo, argv.pais, argv.anio, 1);
         break;
     default:
         console.log("Comando no válido");
