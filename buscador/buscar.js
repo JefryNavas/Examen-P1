@@ -19,9 +19,12 @@ const leerDatos = (path, cod, year, guardar) => {
         })
         .on('end', () => {
             data = arreglar(cod, year);
-            imprimir(data, cod, year);
+
             if (guardar == 1) {
-                guardarDatos(data, cod, year);
+                let resultado = guardarDatos(data, cod, year);
+                console.log(resultado.green);
+            } else {
+                imprimir(data, cod, year);
             }
 
         });
@@ -105,6 +108,9 @@ const buscarDato = (data, cod, year) => {
     pais = data.find(obj => obj.codigo_ciudad == cod);
 
     let datoPais = pais.year[year];
+    if (datoPais == "" || datoPais == 0) {
+        datoPais = "Sin Dato";
+    }
 
     resultado.push({ valor: datoPais });
 
@@ -123,12 +129,18 @@ const guardarDatos = (data, cod, year) => {
     pais = data.find(obj => obj.codigo_ciudad == cod);
     let datos = `Datos:	Personas que usan Internet (% de la población)\nPais: ${pais.nombre_ciudad}\nAño: ${year}\nValor: ${resultado[0].valor}\n`;
     let name = `./resultados/${cod}-${year}.txt`;
+    if (!fs.existsSync(
+            "resultados")) {
+        fs.mkdirSync(
+            "resultados");
+    }
     fs.writeFile(name, datos, (err) => {
         if (err) {
             console.log("Error al guardar el archivo", err);
+            return false;
         }
     })
-    return true;
+    return `Archivo guardado exitosamente: resultados/${cod}-${year}.txt`;
 }
 
 module.exports = { leerDatos }
